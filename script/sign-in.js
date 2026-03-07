@@ -10,7 +10,7 @@ document.getElementById("sign-in-btn").addEventListener("click",() =>{
         
         // 3.1- true::> alert --> Homepage
         alert ("Sign In Successful")
-        window.location.assign("/github-issues-tracker.html")
+        window.location.assign("./github-issues-tracker.html")
     }
     else{
         // 3.2- false::> alert --> return
