@@ -63,14 +63,14 @@
 - On clicking on an open or closed tab, it will load the issues data of the related tab and show it in a display-like card in a 4-column layout like Figma. By default, it will show all data 
 
 - Each card shows:
-  - Title
-  - Description
+  - Title >>
+  - Description >>
   - Status
   - Category
-  - Author
-  - Priority
-  - Label
-  - CreatedAt
+  - Author >>
+  - Priority >>
+  - Label >>
+  - CreatedAt >>
 - Clicking on a tree name in a card will open a modal and show all the information about that Issue. 
 
 ### 🚀 Challenges
