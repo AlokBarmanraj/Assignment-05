@@ -1,17 +1,23 @@
 
+// all issues
+const allIssuesCount = document.getElementById("all-issues-count");
+// all btn
+const allBtn = document.getElementById("all-btn");
+const openBtn = document.getElementById("open-btn");
+const closedBtn = document.getElementById("closed-btn");
 
-const allIssuesCount = document.getElementById("all-issues-count")
-const allBtn = document.getElementById("all-btn")
-const openBtn = document.getElementById("open-btn")
-const closedBtn = document.getElementById("closed-btn")
-
+// all api card 
 const allApiCard = document.getElementById("all-api-card");
-const loadingSpinner = document.getElementById("loading-spinner")
+// loading spinner
+const loadingSpinner = document.getElementById("loading-spinner");
+// modalDeals
+const modalCard =document.getElementById("modal-card");
 
 
 
 // all Issues
 
+// labels
 const createLabels = (arr) =>{
     const labels = arr.map ((el) =>`<span class="btn bg-[#FFF8DB] rounded-3xl text-[#D97706]">${el}</span>`);
     return (labels.join(" "));
@@ -89,7 +95,9 @@ const displayApi = (cardApi) =>{
     allApiCard.innerHTML =" ";
     cardApi.forEach((card) => {
         const apiCard = document.createElement("div");
-        apiCard.className ="bg-white p-5 shadow-2xl rounded-lg border-t-4 border-t-[#00A96E] space-y-3";
+        // apiCard.className ="bg-white p-5 shadow-2xl rounded-lg border-t-4 border-t-[#00A96E] space-y-3";
+        apiCard.className ="bg-white p-5 shadow-2xl rounded-lg border-t-4 border-t-[#00A96E]";
+        
 
 
 
@@ -109,29 +117,69 @@ const displayApi = (cardApi) =>{
 
 
         apiCard.innerHTML =`
-        
-            <div class="flex justify-between">
-                <div class="w-8 h-8 rounded-full bg-[#CBFADB] flex justify-center items-center">
-                    <i class="fa-solid fa-spinner text-[#00A96E]"></i>
+            <div onclick="loadModal(${card.id})" class="space-y-3">
+                <div class="flex justify-between">
+                    <div class="w-8 h-8 rounded-full bg-[#CBFADB] flex justify-center items-center">
+                        <i class="fa-solid fa-spinner text-[#00A96E]"></i>
+                    </div>
+                    <div class="btn bg-[#FEECEC] px-8 rounded-3xl">
+                        <button class="text-[#EF4444]">${card.priority.toUpperCase()}</button>
+                    </div>
                 </div>
-                <div class="btn bg-[#FEECEC] px-8 rounded-3xl">
-                    <button class="text-[#EF4444]">${card.priority.toUpperCase()}</button>
-                </div>
-            </div>
 
-            <h3 class="text-xl font-semibold">${card.title}</h3>
-            <p class="line-clamp-2 text-slate-500">${card.description}</p>
-            <div class="flex gap-2">
-                <div class="">${createLabels(card.labels)}</div>
+                <h3 class="text-xl font-semibold">${card.title}</h3>
+                <p class="line-clamp-2 text-slate-500">${card.description}</p>
+                <div class="flex gap-2">
+                    <div class="">${createLabels(card.labels)}</div>
+                </div>
+                <hr class="border border-slate-300">
+                <div>
+                    <p class="text-slate-500"> #${card.id} by ${card.author}</p>
+                    <p class="text-slate-500">${card.createdAt}</p>
+                </div>
             </div>
-            <hr class="border border-slate-300">
-            <div>
-                <p class="text-slate-500"> #${card.id} by ${card.author}</p>
-                <p class="text-slate-500">${card.createdAt}</p>
-            </div>
-        `
+        `  
         allApiCard.appendChild(apiCard)
         
     });
 }
 loadAllCard ();
+
+
+
+// modal function
+const loadModal = async (id) => {
+    const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
+    const res = await fetch(url);
+    const modalDeals = await res.json();
+    mobileWordDetails(modalDeals.data);
+};
+const mobileWordDetails = (word) => {
+    console.log(word);
+    modalCard.innerHTML =`
+    
+                            <h1 class="text-3xl font-bold">Fix broken image uploads</h1>
+                        <div class="flex items-center gap-2">
+                            <span class="btn text-white bg-[#00A96E] rounded-3xl">Opened</span>
+                            <p class="text-slate-500">. Opened by Fahim Ahmed</p>
+                            <p class="text-slate-500">. 22/02/2026</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <span class="btn bg-[#FEECEC] rounded-3xl text-[#EF4444]"><i class="fa-solid fa-bug"></i> BUG</span>
+                            <span class="btn bg-[#FFF8DB] rounded-3xl text-[#D97706]"><i class="fa-regular fa-life-ring"></i> HELP WANTED</span>
+                        </div>
+                        <p class="text-slate-500">The navigation menu doesn't collapse properly on mobile devices. Need to fix the responsive behavior.</p>
+                        <div class="flex space-x-56 bg-[#F8FAFC] rounded-2xl p-4">
+                            <div>
+                                <p class="text-slate-500">Assignee:</p>
+                                <h2 class="text-xl font-semibold">Fahim Ahmed</h2>
+                            </div>
+                            <div>
+                                <p class="text-slate-500">Priority:</p>
+                                <span class="btn text-white bg-[red] rounded-3xl">HIGH</span>
+                            </div>
+
+                        </div>
+    `;
+    document.getElementById ("my_modal_5").showModal()
+}
