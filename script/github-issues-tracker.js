@@ -1,4 +1,17 @@
 
+
+const allIssuesCount = document.getElementById("all-issues-count")
+const allBtn = document.getElementById("all-btn")
+const openBtn = document.getElementById("open-btn")
+const closedBtn = document.getElementById("closed-btn")
+
+const allApiCard = document.getElementById("all-api-card");
+const loadingSpinner = document.getElementById("loading-spinner")
+
+
+
+// all Issues
+
 const createLabels = (arr) =>{
     const labels = arr.map ((el) =>`<span class="btn bg-[#FFF8DB] rounded-3xl text-[#D97706]">${el}</span>`);
     return (labels.join(" "));
@@ -19,18 +32,62 @@ document.getElementById("search-btn").addEventListener("click", () => {
 })
 
 
+// btn 
+const allActiveBtn = (activeBtn) => {
+    allBtn.classList.remove("btn-primary");
+    openBtn.classList.remove("btn-primary");
+    closedBtn.classList.remove("btn-primary");
+    activeBtn.classList.add("btn-primary")
+};
 
-const allApiCard = document.getElementById("all-api-card");
+
+// btn function
+// open btn
+async function showOpenCard(){
+    const res = await fetch ("https://phi-lab-server.vercel.app/api/v1/lab/issues");
+    const data = await res.json();
+    const openIssues =  data.data.filter(card => card.status ==="open");
+    console.log(openIssues);
+    displayApi(openIssues)
+    allActiveBtn(openBtn);
+}
+
+// Closed btn
+async function showClosedCard(){
+    const res = await fetch ("https://phi-lab-server.vercel.app/api/v1/lab/issues");
+    const data = await res.json();
+    const closedIssues =  data.data.filter(card => card.status ==="closed");
+    console.log(closedIssues);
+    displayApi(closedIssues)
+    allActiveBtn(closedBtn);
+}
+
+allBtn.addEventListener ("click", () =>{
+    loadAllCard()
+    allActiveBtn(allBtn);
+});
+openBtn.addEventListener ("click", () =>{
+    showOpenCard()
+});
+closedBtn.addEventListener ("click", () =>{
+    showClosedCard()
+});
+
+
+// Dynamic upload all api card
 
 async function loadAllCard (){
+    loadingSpinner.classList.remove("hidden");
+    loadingSpinner.classList.add("flex");
     const res = await fetch ("https://phi-lab-server.vercel.app/api/v1/lab/issues")
     const apiData = await res.json();
+    loadingSpinner.classList.add("hidden");
     displayApi(apiData.data);
 }
 const displayApi = (cardApi) =>{
     console.log(cardApi);
+    allApiCard.innerHTML =" ";
     cardApi.forEach((card) => {
-        console.log(card);
         const apiCard = document.createElement("div");
         apiCard.className ="bg-white p-5 shadow-2xl rounded-lg border-t-4 border-t-[#00A96E] space-y-3";
 
@@ -69,7 +126,7 @@ const displayApi = (cardApi) =>{
             </div>
             <hr class="border border-slate-300">
             <div>
-                <p class="text-slate-500"> #1 ${card.author}</p>
+                <p class="text-slate-500"> #${card.id} by ${card.author}</p>
                 <p class="text-slate-500">${card.createdAt}</p>
             </div>
         `
@@ -77,4 +134,4 @@ const displayApi = (cardApi) =>{
         
     });
 }
-loadAllCard ()
+loadAllCard ();
