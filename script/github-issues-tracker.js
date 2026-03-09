@@ -19,7 +19,8 @@ const modalCard =document.getElementById("modal-card");
 
 // labels
 const createLabels = (arr) =>{
-    const labels = arr.map ((el) =>`<span class="btn bg-[#FFF8DB] rounded-3xl text-[#D97706]">${el}</span>`);
+
+    const labels = arr.map ((el) =>`<span class="btn bg-[#FFF8DB] rounded-3xl text-[#D97706]">${el.toUpperCase()}</span>`);
     return (labels.join(" "));
 }
 
@@ -154,29 +155,48 @@ const loadModal = async (id) => {
     const modalDeals = await res.json();
     mobileWordDetails(modalDeals.data);
 };
+
+
+
+
+
+
+// assignee: "mike_docs"
+// author: "link_larry"
+// createdAt: "2024-01-07T13:15:00Z"
+// description: "Several links in the documentation are broken or pointing to outdated pages."
+// id: 34
+// labels: ['documentation']
+// priority: "low"
+// status: "closed"
+// title: "Broken links in documentation"
+// updatedAt: "2024-01-18T15:00:00Z"
+
+
+
+
 const mobileWordDetails = (word) => {
     console.log(word);
     modalCard.innerHTML =`
     
-                            <h1 class="text-3xl font-bold">Fix broken image uploads</h1>
+                            <h1 class="text-3xl font-bold">${word.title}</h1>
                         <div class="flex items-center gap-2">
-                            <span class="btn text-white bg-[#00A96E] rounded-3xl">Opened</span>
-                            <p class="text-slate-500">. Opened by Fahim Ahmed</p>
-                            <p class="text-slate-500">. 22/02/2026</p>
+                            <span class="btn text-white bg-[#00A96E] rounded-3xl">${word.status.toUpperCase()}</span>
+                            <p class="text-slate-500">. Opened by ${word.author}</p>
+                            <p class="text-slate-500">. ${word.createdAt}</p>
                         </div>
                         <div class="flex gap-2">
-                            <span class="btn bg-[#FEECEC] rounded-3xl text-[#EF4444]"><i class="fa-solid fa-bug"></i> BUG</span>
-                            <span class="btn bg-[#FFF8DB] rounded-3xl text-[#D97706]"><i class="fa-regular fa-life-ring"></i> HELP WANTED</span>
+                        <div class="">${createLabels(word.labels)}</div>
                         </div>
-                        <p class="text-slate-500">The navigation menu doesn't collapse properly on mobile devices. Need to fix the responsive behavior.</p>
+                        <p class="line-clamp-2 text-slate-500">${word.description}</p>
                         <div class="flex space-x-56 bg-[#F8FAFC] rounded-2xl p-4">
                             <div>
                                 <p class="text-slate-500">Assignee:</p>
-                                <h2 class="text-xl font-semibold">Fahim Ahmed</h2>
+                                <h2 class="text-xl font-semibold">${word.assignee.toUpperCase()}</h2>
                             </div>
                             <div>
                                 <p class="text-slate-500">Priority:</p>
-                                <span class="btn text-white bg-[red] rounded-3xl">HIGH</span>
+                                <span class="btn text-white bg-[red] rounded-3xl">${word.priority.toUpperCase()}</span>
                             </div>
 
                         </div>
