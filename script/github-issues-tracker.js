@@ -1,3 +1,5 @@
+// input-search
+const inputSearch = document.getElementById("input-search")
 
 // all issues
 const allIssuesCount = document.getElementById("all-issues-count");
@@ -14,9 +16,6 @@ const loadingSpinner = document.getElementById("loading-spinner");
 const modalCard =document.getElementById("modal-card");
 
 
-
-// all Issues
-
 // labels
 const createLabels = (arr) =>{
 
@@ -25,19 +24,28 @@ const createLabels = (arr) =>{
 }
 
 
-document.getElementById("search-btn").addEventListener("click", () => {
-    const inputSearch = document.getElementById("input-search");
-    const searchIssues = inputSearch.value.trim().toLowerCase();
-    console.log(searchIssues);
-    async function searchAllIssues (){
+// Search btn
+document.getElementById ("search-btn").addEventListener("click", () =>{
+    const searchValue = inputSearch.value.trim().toLowerCase();
+    fetch (`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchValue}`)
+    .then ((res) => res.json())
+    .then ((data) => {
+        const allWords = data.data;
+        // const filterWords = allWords.filter((word) => word.word.toLowerCase().includes(searchValue));
+        displayApi(allWords);
+        issuesLength(allWords);
+    });
 
-        const res = await fetch ("https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q={searchText}");
-        const search = await res.json();
-        console.log(search);
-    }
-        
-})
+});
 
+
+
+
+// issues length
+
+const issuesLength = ( arr) => {
+    allIssuesCount.innerText = `${arr.length} Issues`
+}
 
 // btn 
 const allActiveBtn = (activeBtn) => {
@@ -54,8 +62,9 @@ async function showOpenCard(){
     const res = await fetch ("https://phi-lab-server.vercel.app/api/v1/lab/issues");
     const data = await res.json();
     const openIssues =  data.data.filter(card => card.status ==="open");
-    console.log(openIssues);
-    displayApi(openIssues)
+    // console.log(openIssues);
+    displayApi(openIssues);
+    issuesLength(openIssues);
     allActiveBtn(openBtn);
 }
 
@@ -64,8 +73,9 @@ async function showClosedCard(){
     const res = await fetch ("https://phi-lab-server.vercel.app/api/v1/lab/issues");
     const data = await res.json();
     const closedIssues =  data.data.filter(card => card.status ==="closed");
-    console.log(closedIssues);
-    displayApi(closedIssues)
+    // console.log(closedIssues);
+    displayApi(closedIssues);
+    issuesLength(closedIssues);
     allActiveBtn(closedBtn);
 }
 
@@ -89,6 +99,7 @@ async function loadAllCard (){
     const res = await fetch ("https://phi-lab-server.vercel.app/api/v1/lab/issues")
     const apiData = await res.json();
     loadingSpinner.classList.add("hidden");
+    issuesLength(apiData.data);
     displayApi(apiData.data);
 }
 const displayApi = (cardApi) =>{
