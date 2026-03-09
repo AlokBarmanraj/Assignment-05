@@ -92,36 +92,28 @@ async function loadAllCard (){
     displayApi(apiData.data);
 }
 const displayApi = (cardApi) =>{
-    console.log(cardApi);
     allApiCard.innerHTML =" ";
     cardApi.forEach((card) => {
         const apiCard = document.createElement("div");
-        // apiCard.className ="bg-white p-5 shadow-2xl rounded-lg border-t-4 border-t-[#00A96E] space-y-3";
-        apiCard.className ="bg-white p-5 shadow-2xl rounded-lg border-t-4 border-t-[#00A96E]";
-        
+        // status color 
+        let borderColor;
+        let bgColor; 
+        if(card.status === "closed"){
+            borderColor = "border-t-[#A855F7]";
+            bgColor = "bg-[#A855F7]";
+        }
+        else{
+            borderColor = "border-t-[#00A96E]";
+            bgColor = "bg-[#00A96E]";
+        }
 
-
-
-
-
-// assignee: "jane_smith"
-// author: "john_doe" ^__
-// createdAt: "2024-01-15T10:30:00Z" ^__
-// description: "The navigation menu doesn't collapse properly on mobile devices. Need to fix the responsive behavior." ^__
-// id: 1
-// labels: (2) ['bug', 'help wanted'] ^__
-// priority: "high" ^__
-// status: "open"
-// title: "Fix navigation menu on mobile devices ^__
-// updatedAt: "2024-01-15T10:30:00Z"
-
-
+        apiCard.className =`bg-white p-5 shadow-2xl rounded-lg border-t-4 ${borderColor}`;
 
         apiCard.innerHTML =`
             <div onclick="loadModal(${card.id})" class="space-y-3">
                 <div class="flex justify-between">
-                    <div class="w-8 h-8 rounded-full bg-[#CBFADB] flex justify-center items-center">
-                        <i class="fa-solid fa-spinner text-[#00A96E]"></i>
+                    <div class="w-8 h-8 rounded-full ${bgColor} flex justify-center items-center">
+                        <i class="fa-regular fa-circle-check text-white"></i>
                     </div>
                     <div class="btn bg-[#FEECEC] px-8 rounded-3xl">
                         <button class="text-[#EF4444]">${card.priority.toUpperCase()}</button>
@@ -156,32 +148,20 @@ const loadModal = async (id) => {
     mobileWordDetails(modalDeals.data);
 };
 
-
-
-
-
-
-// assignee: "mike_docs"
-// author: "link_larry"
-// createdAt: "2024-01-07T13:15:00Z"
-// description: "Several links in the documentation are broken or pointing to outdated pages."
-// id: 34
-// labels: ['documentation']
-// priority: "low"
-// status: "closed"
-// title: "Broken links in documentation"
-// updatedAt: "2024-01-18T15:00:00Z"
-
-
-
-
 const mobileWordDetails = (word) => {
-    console.log(word);
+    // console.log(word);
+            let modalBtnStatusColor; 
+        if(word.status === "closed"){
+            modalBtnStatusColor = "bg-[#A855F7]";
+        }
+        else{
+            modalBtnStatusColor = "bg-[#00A96E]";
+        }
     modalCard.innerHTML =`
     
                             <h1 class="text-3xl font-bold">${word.title}</h1>
                         <div class="flex items-center gap-2">
-                            <span class="btn text-white bg-[#00A96E] rounded-3xl">${word.status.toUpperCase()}</span>
+                            <span class="btn text-white ${modalBtnStatusColor} rounded-3xl">${word.status.toUpperCase()}</span>
                             <p class="text-slate-500">. Opened by ${word.author}</p>
                             <p class="text-slate-500">. ${word.createdAt}</p>
                         </div>
